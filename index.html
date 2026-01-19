@@ -80,7 +80,7 @@ body::after{
   z-index:10;
 }
 
-/* 投影片 */
+/* ===== 投影片 ===== */
 .slide{
   position:absolute;
   inset:0;
@@ -150,7 +150,7 @@ body::after{
   font-size:26px;
 }
 
-/* ===== 手機版 ===== */
+/* ===== 手機版調整 ===== */
 @media (max-width:768px){
   .logo{width:100px; top:16px; left:16px;}
   .slide{padding:40px 20px;}
@@ -161,6 +161,36 @@ body::after{
   .cover h1{font-size:56px;}
   .cover p{font-size:16px;}
 }
+  
+/* ===== 手機換頁按鈕（只在手機顯示） ===== */
+.nav-buttons{
+  display:none;
+}
+
+@media (max-width:768px){
+  .nav-buttons{
+    display:flex;
+    position:fixed;
+    bottom:20px;
+    left:0;
+    width:100%;
+    justify-content:space-between;
+    padding:0 20px;
+    z-index:20;
+  }
+
+  .nav-buttons button{
+    flex:1;
+    margin:0 10px;
+    padding:14px 0;
+    font-size:18px;
+    font-weight:700;
+    border:none;
+    border-radius:999px;
+    color:#fff;
+    background:linear-gradient(135deg,var(--purple),var(--blue));
+  }
+}
 </style>
 </head>
 
@@ -168,15 +198,20 @@ body::after{
 
 <img src="img/gymco_logo_transparent.png" class="logo">
 
+<!-- 手機換頁按鈕 -->
+<div class="nav-buttons">
+  <button id="prevBtn">上一頁</button>
+  <button id="nextBtn">下一頁</button>
+</div>
+
 <!-- 封面 -->
 <div class="slide active cover">
   <h1>僑泰鑫健康事業股份有限公司</h1>
   <h1>尾牙獎金爭奪戰</h1>
   <p>YEAR END PARTY • ESPORTS MODE</p>
-  <div class="hint">點擊畫面（左回／右進）或 → ←</div>
+  <div class="hint">電腦用 ← →｜手機用下方按鈕</div>
 </div>
 
-<!-- GAME 1 -->
 <div class="slide">
   <div class="round">GAME 1</div>
   <h1>乒乓接接樂</h1>
@@ -187,7 +222,6 @@ body::after{
   <div class="reward">獎金 NT$2,000</div>
 </div>
 
-<!-- GAME 2 -->
 <div class="slide">
   <div class="round">GAME 2</div>
   <h1>誰是人中人</h1>
@@ -198,7 +232,6 @@ body::after{
   <div class="reward">獎金 NT$5,000</div>
 </div>
 
-<!-- GAME 3 -->
 <div class="slide">
   <div class="round">GAME 3</div>
   <h1>一起吹落去</h1>
@@ -209,7 +242,6 @@ body::after{
   <div class="reward">獎金 NT$2,000</div>
 </div>
 
-<!-- GAME 4 -->
 <div class="slide">
   <div class="round">GAME 4</div>
   <h1>剪不斷理還亂・甩不掉誰最賺</h1>
@@ -220,7 +252,6 @@ body::after{
   <div class="reward">獎金 NT$1,000</div>
 </div>
 
-<!-- GAME 5 -->
 <div class="slide">
   <div class="round">GAME 5</div>
   <h1>大象大象誰的鼻子最長</h1>
@@ -231,7 +262,6 @@ body::after{
   <div class="reward">獎金 NT$3,000</div>
 </div>
 
-<!-- GAME 6 -->
 <div class="slide">
   <div class="round">GAME 6</div>
   <h1>水能載舟，腹能載金</h1>
@@ -262,18 +292,15 @@ document.addEventListener("keydown",e=>{
   }
 });
 
-function handleTouch(x){
-  const w = window.innerWidth;
-  if(x < w/2){
-    index = Math.max(index-1,0);
-  }else{
-    index = Math.min(index+1,slides.length-1);
-  }
+// 手機按鈕
+document.getElementById("prevBtn").onclick = ()=>{
+  index = Math.max(index-1,0);
   show(index);
-}
-
-document.addEventListener("click",e=>handleTouch(e.clientX));
-document.addEventListener("touchstart",e=>handleTouch(e.touches[0].clientX));
+};
+document.getElementById("nextBtn").onclick = ()=>{
+  index = Math.min(index+1,slides.length-1);
+  show(index);
+};
 </script>
 
 </body>
