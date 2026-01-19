@@ -156,7 +156,12 @@ body::after{
   .slide{padding:40px 20px;}
   .slide h1{font-size:48px;}
   .rule{font-size:20px;}
-  .reward{font-size:22px; padding:12px 28px;}
+  .reward{
+  	box-shadow:
+    0 0 20px rgba(180,90,255,.6),
+    inset 0 0 10px rgba(255,255,255,.3);
+	}
+
   .round{font-size:14px; padding:8px 16px;}
   .cover h1{font-size:56px;}
   .cover p{font-size:16px;}
@@ -191,6 +196,18 @@ body::after{
     background:linear-gradient(135deg,var(--purple),var(--blue));
   }
 }
+@keyframes glowFlow{
+  0%{filter:drop-shadow(0 0 10px rgba(80,180,255,.5));}
+  50%{filter:drop-shadow(0 0 24px rgba(180,90,255,.8));}
+  100%{filter:drop-shadow(0 0 10px rgba(80,180,255,.5));}
+}
+
+.slide h1{
+  animation:glowFlow 3s ease-in-out infinite;
+}
+
+
+
 </style>
 </head>
 
@@ -314,5 +331,4 @@ if (!('ontouchstart' in window)) {
 
 </body>
 </html>
-
 
