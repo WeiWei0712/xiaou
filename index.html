@@ -1,147 +1,252 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <title>數小柚子助眠小網頁</title>
-  <style>
-    body {
-      margin: 0;
-      background: linear-gradient(to top, #0a0a23, #1a1a40);
-      overflow: hidden;
-      font-family: "Noto Sans TC", sans-serif;
-      color: white;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<title>尾牙獎金爭奪戰 | GYMCO SPORTS</title>
 
-    h1 {
-      margin-top: 20px;
-      font-size: 2em;
-    }
+<style>
+:root{
+  --blue:#50b4ff;
+  --purple:#b45aff;
+  --white:#f5f5f5;
+}
 
-    #counter {
-      font-size: 1.5em;
-      margin: 10px 0;
-    }
+*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
 
-    .field {
-      position: relative;
-      width: 100%;
-      height: 300px;
-      overflow: hidden;
-      border-top: 3px solid #ccc;
-      border-bottom: 3px solid #ccc;
-      margin-top: 30px;
-    }
+body{
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  color:var(--white);
+  background:linear-gradient(120deg,#0c0a19,#120f2e);
+  position:relative;
+}
 
-    .fence {
-      position: absolute;
-      left: 50%;
-      bottom: 0;
-      width: 50px;
-      height: 100px;
-      background: #8B5A2B;
-      transform: translateX(-50%);
-      border-radius: 5px;
-    }
+/* 不規則電競燈條背景 */
+body::before,
+body::after{
+  content:"";
+  position:fixed;
+  inset:-20%;
+  z-index:-1;
+  opacity:.35;
+  animation:lightMove 18s linear infinite;
+}
 
-    .sheep {
-      position: absolute;
-      bottom: 0;
-      width: 60px;
-      transition: left 0.3s;
-      animation: jump 4s linear forwards;
-    }
+body::before{
+  background:linear-gradient(
+    120deg,
+    transparent 30%,
+    #50b4ff 45%,
+    #b45aff 55%,
+    transparent 70%
+  );
+  clip-path:polygon(
+    0 10%, 100% 0,
+    85% 25%, 20% 45%,
+    80% 70%, 10% 90%
+  );
+}
 
-    @keyframes jump {
-      0% { left: -60px; bottom: 0; }
-      20% { bottom: 80px; }
-      50% { left: 50%; bottom: 120px; transform: rotate(-10deg); }
-      70% { bottom: 80px; transform: rotate(10deg); }
-      100% { left: 110%; bottom: 0; }
-    }
+body::after{
+  background:linear-gradient(
+    120deg,
+    transparent 40%,
+    #b45aff 55%,
+    #50b4ff 65%,
+    transparent 80%
+  );
+  clip-path:polygon(
+    10% 0, 100% 15%,
+    70% 35%, 95% 60%,
+    30% 85%, 0 60%
+  );
+  animation-duration:26s;
+}
 
-    .controls {
-      margin-top: 20px;
-    }
+@keyframes lightMove{
+  from{transform:translate(-8%,-8%);}
+  to{transform:translate(8%,8%);}
+}
 
-    .controls button {
-      font-size: 1em;
-      padding: 10px 20px;
-      margin: 0 10px;
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
-      background: #4caf50;
-      color: white;
-    }
+/* LOGO */
+.logo{
+  position:fixed;
+  top:24px;
+  left:32px;
+  width:250px;
+  opacity:.9;
+  z-index:10;
+}
 
-    .controls button:hover {
-      background: #45a049;
-    }
+/* 投影片 */
+.slide{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:100px;
+  opacity:0;
+  transform:scale(.95);
+  transition:.6s ease;
+}
 
-    .controls button.reset {
-      background: #f44336;
-    }
+.slide.active{
+  opacity:1;
+  transform:scale(1);
+  z-index:1;
+}
 
-    .controls button.reset:hover {
-      background: #e53935;
-    }
-  </style>
+/* 字體放大重點 */
+.slide h1{
+  font-size:96px;
+  margin:0 0 40px;
+  color:var(--blue);
+}
+
+.rule{
+  font-size:36px;
+  line-height:1.8;
+  max-width:1000px;
+  opacity:.95;
+}
+
+.reward{
+  margin-top:50px;
+  padding:18px 50px;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  font-size:40px;
+  font-weight:700;
+}
+
+.round{
+  position:absolute;
+  top:30px;
+  right:40px;
+  padding:14px 28px;
+  border-radius:24px;
+  background:var(--purple);
+  font-size:22px;
+  font-weight:700;
+}
+
+.hint{
+  position:absolute;
+  bottom:30px;
+  opacity:.5;
+  font-size:16px;
+}
+
+/* 封面 */
+.cover h1{font-size:120px;}
+.cover p{
+  color:var(--purple);
+  letter-spacing:3px;
+  margin-top:24px;
+  font-size:26px;
+}
+</style>
 </head>
+
 <body>
-  <h1>🌙 想小柚子小網頁</h1>
-  <div id="counter">已數：0 隻小柚子</div>
 
-  <div class="field">
-    <div class="fence"></div>
+<img src="img/gymco_logo_transparent.png" class="logo">
+
+<div class="slide active cover">
+  <h1>尾牙獎金爭奪戰</h1>
+  <p>YEAR END PARTY • ESPORTS MODE</p>
+  <div class="hint">點擊畫面或按 → 開始</div>
+</div>
+
+<div class="slide">
+  <div class="round">GAME 1</div>
+  <h1>乒乓接接樂</h1>
+  <div class="rule">
+    每桌派 5 位人員參賽，輪流使用杯底將乒乓球拋起後，
+    並用杯子接住，最快完成的組別獲勝。
   </div>
+  <div class="reward">獎金 NT$2,000</div>
+</div>
 
-  <div class="controls">
-    <button onclick="toggleCounting()">開始數小柚子</button>
-    <button class="reset" onclick="resetCounting()">重置</button>
+<div class="slide">
+  <div class="round">GAME 2</div>
+  <h1>誰是人中人</h1>
+  <div class="rule">
+    各桌 10 位人員參賽，輪流使用人中夾住筷子，
+    將筷子放入寶特瓶中，最快完成的組別獲勝。
   </div>
+  <div class="reward">獎金 NT$5,000</div>
+</div>
 
-  <script>
-    let count = 0;
-    let intervalId = null;
-    const field = document.querySelector('.field');
-    const counterText = document.getElementById('counter');
-    const startButton = document.querySelector('.controls button');
+<div class="slide">
+  <div class="round">GAME 3</div>
+  <h1>一起吹落去</h1>
+  <div class="rule">
+    輪流先把氣球吹氣，再使用吹氣後的氣球
+    將 5 個杯子吹落，最快完成者獲勝。
+  </div>
+  <div class="reward">獎金 NT$2,000</div>
+</div>
 
-    function createSheep() {
-      const sheep = document.createElement('img');
-      sheep.src = 'img/1.jpg'; // 一隻可愛的綿羊圖
-      sheep.className = 'sheep';
-      field.appendChild(sheep);
+<div class="slide">
+  <div class="round">GAME 4</div>
+  <h1>剪不斷理還亂・甩不掉誰最賺</h1>
+  <div class="rule">
+    每位小朋友身上貼 10 張便條紙，
+    計時 2 分鐘，身上剩最少者獲勝。
+  </div>
+  <div class="reward">獎金 NT$1,000</div>
+</div>
 
-      sheep.addEventListener('animationend', () => {
-        sheep.remove();
-      });
+<div class="slide">
+  <div class="round">GAME 5</div>
+  <h1>大象大象誰的鼻子最長</h1>
+  <div class="rule">
+    於腰間綁上杯子，利用慣性將乒乓球甩入杯中，
+    最快完成的 3 位獲勝。
+  </div>
+  <div class="reward">獎金 NT$3,000</div>
+</div>
 
-      count++;
-      counterText.textContent = `已數：${count} 隻小柚子`;
-    }
+<div class="slide">
+  <div class="round">GAME 6</div>
+  <h1>水能載舟，腹能載金</h1>
+  <div class="rule">
+    輪流接力喝 5 種飲料，
+    最快完成的組別獲勝。
+  </div>
+  <div class="reward">獎金 NT$2,000</div>
+</div>
 
-    function toggleCounting() {
-      if (intervalId) {
-        clearInterval(intervalId);
-        intervalId = null;
-        startButton.textContent = "開始數柚子";
-      } else {
-        createSheep();
-        intervalId = setInterval(createSheep, 3000);
-        startButton.textContent = "停止數柚子";
-      }
-    }
+<script>
+const slides = document.querySelectorAll(".slide");
+let index = 0;
 
-    function resetCounting() {
-      clearInterval(intervalId);
-      intervalId = null;
-      count = 0;
-      counterText.textContent = `已數：0 隻綿羊`;
-      field.querySelectorAll('.sheep').forEach(s => s.remove());
-      startButton.textContent = "開始數綿羊";
-    }
-  </script>
+function show(i){
+  slides.forEach(s=>s.classList.remove("active"));
+  slides[i].classList.add("active");
+}
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight"){
+    index = Math.min(index+1, slides.length-1);
+    show(index);
+  }
+  if(e.key==="ArrowLeft"){
+    index = Math.max(index-1, 0);
+    show(index);
+  }
+});
+
+document.addEventListener("click",()=>{
+  index = Math.min(index+1, slides.length-1);
+  show(index);
+});
+</script>
+
 </body>
 </html>
