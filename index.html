@@ -250,7 +250,20 @@ editBtn.onclick = ()=>{
     editBtn.classList.remove("active");
   }
 };
+  // ===== 滑鼠點擊換頁（僅限非編輯模式）=====
+document.addEventListener("click", (e)=>{
+  // 如果正在編輯獎金，不換頁
+  if (editing) return;
+
+  // 點到編輯按鈕本身，不換頁
+  if (e.target.id === "editBtn") return;
+
+  index = Math.min(index + 1, slides.length - 1);
+  show(index);
+});
+
 </script>
 
 </body>
 </html>
+
