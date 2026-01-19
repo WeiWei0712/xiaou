@@ -22,7 +22,7 @@ html,body{
   color:var(--white);
 }
 
-/* ===== 實體背景層（穩定） ===== */
+/* ===== 背景（完全照你原本） ===== */
 .bg{
   position:fixed;
   inset:0;
@@ -32,7 +32,6 @@ html,body{
     linear-gradient(120deg,#0c0a19,#120f2e);
 }
 
-/* ===== 炫彩不規則燈條（手機 / 電腦共用） ===== */
 .lights{
   position:fixed;
   inset:-20%;
@@ -50,33 +49,13 @@ html,body{
 }
 
 .lights::before{
-  background:linear-gradient(
-    120deg,
-    transparent 30%,
-    #50b4ff 45%,
-    #b45aff 55%,
-    transparent 70%
-  );
-  clip-path:polygon(
-    0 10%, 100% 0,
-    85% 25%, 20% 45%,
-    80% 70%, 10% 90%
-  );
+  background:linear-gradient(120deg,transparent 30%,#50b4ff 45%,#b45aff 55%,transparent 70%);
+  clip-path:polygon(0 10%,100% 0,85% 25%,20% 45%,80% 70%,10% 90%);
 }
 
 .lights::after{
-  background:linear-gradient(
-    120deg,
-    transparent 40%,
-    #b45aff 55%,
-    #50b4ff 65%,
-    transparent 80%
-  );
-  clip-path:polygon(
-    10% 0, 100% 15%,
-    70% 35%, 95% 60%,
-    30% 85%, 0 60%
-  );
+  background:linear-gradient(120deg,transparent 40%,#b45aff 55%,#50b4ff 65%,transparent 80%);
+  clip-path:polygon(10% 0,100% 15%,70% 35%,95% 60%,30% 85%,0 60%);
   animation-duration:32s;
 }
 
@@ -85,14 +64,14 @@ html,body{
   to{transform:translate(8%,8%);}
 }
 
-/* ===== LOGO ===== */
-.logo{
+.bg-logo{
   position:fixed;
-  top:24px;
-  left:32px;
-  width:150px;
-  opacity:.9;
-  z-index:10;
+  inset:0;
+  z-index:-1;
+  background:url("img/1.png") no-repeat center;
+  background-size:50vmin;
+  opacity:.4;
+  pointer-events:none;
 }
 
 /* ===== 投影片 ===== */
@@ -116,34 +95,26 @@ html,body{
   z-index:1;
 }
 
-/* ===== 字體效果（電競漸層發光） ===== */
+/* 標題 */
 .slide h1{
   font-size:96px;
   margin:0 0 40px;
   background:linear-gradient(90deg,#50b4ff,#b45aff);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  text-shadow:
-    0 0 14px rgba(80,180,255,.5),
-    0 0 28px rgba(180,90,255,.4);
+  text-shadow:0 0 14px rgba(80,180,255,.5),0 0 28px rgba(180,90,255,.4);
 }
-.slide active cover h1{
-	font-size:60px;
-  margin:0 0 40px;
-  background:linear-gradient(90deg,#50b4ff,#b45aff);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  text-shadow:
-    0 0 14px rgba(80,180,255,.5),
-    0 0 28px rgba(180,90,255,.4);
-}
+
+.cover h1{font-size:90px;}
+.cover p{color:var(--purple);letter-spacing:3px;font-size:26px;}
+
 .rule{
   font-size:36px;
   line-height:1.8;
   max-width:1000px;
-  opacity:.95;
 }
 
+/* ===== 獎金（只讓數字改） ===== */
 .reward{
   margin-top:50px;
   padding:18px 50px;
@@ -154,83 +125,35 @@ html,body{
   box-shadow:0 0 24px rgba(180,90,255,.6);
 }
 
-.round{
-  position:absolute;
-  top:30px;
-  right:40px;
-  padding:14px 28px;
-  border-radius:24px;
-  background:var(--purple);
-  font-size:22px;
-  font-weight:700;
+.reward span{
+  outline:none;
 }
 
-.hint{
-  position:absolute;
-  bottom:30px;
-  opacity:.5;
-  font-size:16px;
+.reward span[contenteditable="true"]:focus{
+  outline:2px dashed rgba(255,255,255,.8);
+  background:rgba(255,255,255,.15);
 }
 
-/* ===== 封面 ===== */
-.cover h1{font-size:90px;}
-.cover p{
-  color:var(--purple);
-  letter-spacing:3px;
-  margin-top:24px;
-  font-size:26px;
-}
-
-/* ===== 手機版 ===== */
-@media (max-width:768px){
-  .logo{width:100px; top:16px; left:16px;}
-  .slide{padding:40px 20px;}
-  .slide h1{font-size:48px;}
-  .rule{font-size:20px;}
-  .reward{font-size:22px; padding:12px 28px;}
-  .round{font-size:14px; padding:8px 16px;}
-  .cover h1{font-size:50px;}
-  .cover p{font-size:16px;}
-}
-
-/* ===== 手機換頁按鈕 ===== */
-.nav-buttons{
-  display:none;
-}
-
-@media (max-width:768px){
-  .nav-buttons{
-    display:flex;
-    position:fixed;
-    bottom:20px;
-    left:0;
-    width:100%;
-    justify-content:space-between;
-    padding:0 20px;
-    z-index:20;
-  }
-
-  .nav-buttons button{
-    flex:1;
-    margin:0 10px;
-    padding:14px 0;
-    font-size:18px;
-    font-weight:700;
-    border:none;
-    border-radius:999px;
-    color:#fff;
-    background:linear-gradient(135deg,var(--purple),var(--blue));
-  }
-}
-.bg-logo{
+/* ===== 編輯按鈕 ===== */
+.edit-btn{
   position:fixed;
-  inset:0;
-  z-index:-1;
-  background:url("img/1.png") no-repeat center;
-  background-size:50vmin; /* 控制 LOGO 大小 */
-  opacity:.4;            /* 透明度，數字越小越淡 */
-  pointer-events:none;
-  filter:blur(0.5px);
+  bottom:20px;
+  right:20px;
+  z-index:50;
+  padding:12px 22px;
+  border:none;
+  border-radius:999px;
+  font-size:16px;
+  font-weight:700;
+  color:#fff;
+  cursor:pointer;
+  background:linear-gradient(135deg,#555,#333);
+  opacity:.7;
+}
+
+.edit-btn.active{
+  background:linear-gradient(135deg,#b45aff,#50b4ff);
+  opacity:1;
 }
 </style>
 </head>
@@ -241,83 +164,54 @@ html,body{
 <div class="lights"></div>
 <div class="bg-logo"></div>
 
-
-<div class="nav-buttons">
-  <button id="prevBtn">上一頁</button>
-  <button id="nextBtn">下一頁</button>
-</div>
+<button id="editBtn" class="edit-btn">🔒 編輯獎金</button>
 
 <!-- 封面 -->
 <div class="slide active cover">
-	<h1>僑泰鑫健康</h1>
-	
-
+  <h1>僑泰鑫健康</h1>
   <h1>尾牙獎金爭奪戰</h1>
   <p>YEAR END PARTY • ESPORTS MODE</p>
-  <div class="hint">電腦：點擊或 ← → ｜ 手機：下方按鈕</div>
 </div>
 
+<!-- GAME -->
 <div class="slide">
-  <div class="round">GAME 1</div>
   <h1>乒乓接接樂</h1>
-  <div class="rule">
-    每桌派 5 位人員參賽，輪流使用杯底將乒乓球拋起後，
-    並用杯子接住，最快完成的組別獲勝。
-  </div>
-  <div class="reward">獎金 NT$2,000</div>
+  <div class="rule">最快完成的組別獲勝</div>
+  <div class="reward">獎金 NT$ <span class="money">2,000</span></div>
 </div>
 
 <div class="slide">
-  <div class="round">GAME 2</div>
   <h1>誰是人中人</h1>
-  <div class="rule">
-    各桌 10 位人員參賽，輪流使用人中夾住筷子，
-    將筷子放入寶特瓶中，最快完成的組別獲勝。
-  </div>
-  <div class="reward">獎金 NT$5,000</div>
+  <div class="rule">最快完成的組別獲勝</div>
+  <div class="reward">獎金 NT$ <span class="money">5,000</span></div>
 </div>
 
 <div class="slide">
-  <div class="round">GAME 3</div>
   <h1>一起吹落去</h1>
-  <div class="rule">
-    輪流先把氣球吹氣，再使用吹氣後的氣球
-    將 5 個杯子吹落，最快完成者獲勝。
-  </div>
-  <div class="reward">獎金 NT$2,000</div>
+  <div class="rule">最快完成者獲勝</div>
+  <div class="reward">獎金 NT$ <span class="money">2,000</span></div>
 </div>
 
 <div class="slide">
-  <div class="round">GAME 4</div>
   <h1>剪不斷理還亂・甩不掉誰最賺</h1>
-  <div class="rule">
-    每位小朋友身上貼 10 張便條紙，
-    計時 2 分鐘，身上剩最少者獲勝。
-  </div>
-  <div class="reward">獎金 NT$1,000</div>
+  <div class="rule">剩最少便條紙者獲勝</div>
+  <div class="reward">獎金 NT$ <span class="money">1,000</span></div>
 </div>
 
 <div class="slide">
-  <div class="round">GAME 5</div>
   <h1>大象大象誰的鼻子最長</h1>
-  <div class="rule">
-    於腰間綁上杯子，利用慣性將乒乓球甩入杯中，
-    最快完成的 3 位獲勝。
-  </div>
-  <div class="reward">獎金 NT$3,000</div>
+  <div class="rule">最快完成的 3 位獲勝</div>
+  <div class="reward">獎金 NT$ <span class="money">3,000</span></div>
 </div>
 
 <div class="slide">
-  <div class="round">GAME 6</div>
   <h1>水能載舟，腹能載金</h1>
-  <div class="rule">
-    輪流接力喝 5 種飲料，
-    最快完成的組別獲勝。
-  </div>
-  <div class="reward">獎金 NT$2,000</div>
+  <div class="rule">最快完成的組別獲勝</div>
+  <div class="reward">獎金 NT$ <span class="money">2,000</span></div>
 </div>
 
 <script>
+/* ===== 換頁（照你原本） ===== */
 const slides = document.querySelectorAll(".slide");
 let index = 0;
 
@@ -326,39 +220,37 @@ function show(i){
   slides[i].classList.add("active");
 }
 
-// 電腦：鍵盤 + 點擊
-if(!('ontouchstart' in window)){
-  document.addEventListener("keydown",e=>{
-    if(e.key==="ArrowRight"){ index=Math.min(index+1,slides.length-1); show(index); }
-    if(e.key==="ArrowLeft"){ index=Math.max(index-1,0); show(index); }
-  });
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight"){ index=Math.min(index+1,slides.length-1); show(index); }
+  if(e.key==="ArrowLeft"){ index=Math.max(index-1,0); show(index); }
+});
 
-  document.addEventListener("click",()=>{
-    index=Math.min(index+1,slides.length-1);
-    show(index);
-  });
-}
+/* ===== 獎金編輯（密碼） ===== */
+const PASSWORD = "20260122"; // ← 改這裡
+let editing = false;
 
-// 手機：按鈕
-document.getElementById("prevBtn").onclick=()=>{
-  index=Math.max(index-1,0); show(index);
-};
-document.getElementById("nextBtn").onclick=()=>{
-  index=Math.min(index+1,slides.length-1); show(index);
+const editBtn = document.getElementById("editBtn");
+const moneyEls = document.querySelectorAll(".money");
+
+editBtn.onclick = ()=>{
+  if(!editing){
+    const input = prompt("請輸入獎金編輯密碼");
+    if(input === PASSWORD){
+      editing = true;
+      moneyEls.forEach(el=>el.contentEditable = true);
+      editBtn.textContent = "🔓 編輯中";
+      editBtn.classList.add("active");
+    }else{
+      alert("密碼錯誤");
+    }
+  }else{
+    editing = false;
+    moneyEls.forEach(el=>el.contentEditable = false);
+    editBtn.textContent = "🔒 編輯獎金";
+    editBtn.classList.remove("active");
+  }
 };
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
