@@ -6,12 +6,6 @@
 <title>尾牙獎金爭奪戰 | GYMCO SPORTS</title>
 
 <style>
-html, body{
-  width:100%;
-  height:100%;
-  background:#0c0a19; /* 深色保底 */
-}
-
 :root{
   --blue:#50b4ff;
   --purple:#b45aff;
@@ -20,27 +14,42 @@ html, body{
 
 *{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
 
-body{
+html,body{
+  width:100%;
+  height:100%;
   margin:0;
-  height:100vh;
   overflow:hidden;
   color:var(--white);
-  background:linear-gradient(120deg,#0c0a19,#120f2e);
-  position:relative;
 }
 
-/* ===== 不規則電競燈條背景 ===== */
-body::before,
-body::after{
-  content:"";
+/* ===== 實體背景層（穩定） ===== */
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  background:
+    radial-gradient(circle at top, #1a1440 0%, transparent 60%),
+    linear-gradient(120deg,#0c0a19,#120f2e);
+}
+
+/* ===== 炫彩不規則燈條（手機 / 電腦共用） ===== */
+.lights{
   position:fixed;
   inset:-20%;
-  z-index:-1;
-  opacity:.35;
-  animation:lightMove 18s linear infinite;
+  z-index:-2;
+  pointer-events:none;
 }
 
-body::before{
+.lights::before,
+.lights::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.45;
+  animation:lightMove 22s linear infinite;
+}
+
+.lights::before{
   background:linear-gradient(
     120deg,
     transparent 30%,
@@ -55,7 +64,7 @@ body::before{
   );
 }
 
-body::after{
+.lights::after{
   background:linear-gradient(
     120deg,
     transparent 40%,
@@ -68,7 +77,7 @@ body::after{
     70% 35%, 95% 60%,
     30% 85%, 0 60%
   );
-  animation-duration:26s;
+  animation-duration:32s;
 }
 
 @keyframes lightMove{
@@ -76,12 +85,12 @@ body::after{
   to{transform:translate(8%,8%);}
 }
 
-/* LOGO */
+/* ===== LOGO ===== */
 .logo{
   position:fixed;
   top:24px;
   left:32px;
-  width:120px;
+  width:150px;
   opacity:.9;
   z-index:10;
 }
@@ -107,10 +116,16 @@ body::after{
   z-index:1;
 }
 
+/* ===== 字體效果（電競漸層發光） ===== */
 .slide h1{
   font-size:96px;
   margin:0 0 40px;
-  color:var(--blue);
+  background:linear-gradient(90deg,#50b4ff,#b45aff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:
+    0 0 14px rgba(80,180,255,.5),
+    0 0 28px rgba(180,90,255,.4);
 }
 
 .rule{
@@ -127,6 +142,7 @@ body::after{
   background:linear-gradient(135deg,var(--purple),var(--blue));
   font-size:40px;
   font-weight:700;
+  box-shadow:0 0 24px rgba(180,90,255,.6);
 }
 
 .round{
@@ -147,7 +163,7 @@ body::after{
   font-size:16px;
 }
 
-/* 封面 */
+/* ===== 封面 ===== */
 .cover h1{font-size:120px;}
 .cover p{
   color:var(--purple);
@@ -156,24 +172,19 @@ body::after{
   font-size:26px;
 }
 
-/* ===== 手機版調整 ===== */
+/* ===== 手機版 ===== */
 @media (max-width:768px){
   .logo{width:100px; top:16px; left:16px;}
   .slide{padding:40px 20px;}
   .slide h1{font-size:48px;}
   .rule{font-size:20px;}
-  .reward{
-  	box-shadow:
-    0 0 20px rgba(180,90,255,.6),
-    inset 0 0 10px rgba(255,255,255,.3);
-	}
-
+  .reward{font-size:22px; padding:12px 28px;}
   .round{font-size:14px; padding:8px 16px;}
   .cover h1{font-size:56px;}
   .cover p{font-size:16px;}
 }
-  
-/* ===== 手機換頁按鈕（只在手機顯示） ===== */
+
+/* ===== 手機換頁按鈕 ===== */
 .nav-buttons{
   display:none;
 }
@@ -202,26 +213,16 @@ body::after{
     background:linear-gradient(135deg,var(--purple),var(--blue));
   }
 }
-@keyframes glowFlow{
-  0%{filter:drop-shadow(0 0 10px rgba(80,180,255,.5));}
-  50%{filter:drop-shadow(0 0 24px rgba(180,90,255,.8));}
-  100%{filter:drop-shadow(0 0 10px rgba(80,180,255,.5));}
-}
-
-.slide h1{
-  animation:glowFlow 3s ease-in-out infinite;
-}
-
-
-
 </style>
 </head>
 
 <body>
 
-<img src="img/gymco_logo_transparent.png" class="logo">
+<div class="bg"></div>
+<div class="lights"></div>
 
-<!-- 手機換頁按鈕 -->
+<img src="gymco_logo_transparent.png" class="logo">
+
 <div class="nav-buttons">
   <button id="prevBtn">上一頁</button>
   <button id="nextBtn">下一頁</button>
@@ -229,10 +230,10 @@ body::after{
 
 <!-- 封面 -->
 <div class="slide active cover">
-  <h1>僑泰鑫健康事業股份有限公司</h1>
+	
   <h1>尾牙獎金爭奪戰</h1>
   <p>YEAR END PARTY • ESPORTS MODE</p>
-  <div class="hint">電腦用 ← →｜手機用下方按鈕</div>
+  <div class="hint">電腦：點擊或 ← → ｜ 手機：下方按鈕</div>
 </div>
 
 <div class="slide">
@@ -304,37 +305,27 @@ function show(i){
   slides[i].classList.add("active");
 }
 
-document.addEventListener("keydown",e=>{
-  if(e.key==="ArrowRight"){
-    index = Math.min(index+1, slides.length-1);
-    show(index);
-  }
-  if(e.key==="ArrowLeft"){
-    index = Math.max(index-1, 0);
-    show(index);
-  }
-});
+// 電腦：鍵盤 + 點擊
+if(!('ontouchstart' in window)){
+  document.addEventListener("keydown",e=>{
+    if(e.key==="ArrowRight"){ index=Math.min(index+1,slides.length-1); show(index); }
+    if(e.key==="ArrowLeft"){ index=Math.max(index-1,0); show(index); }
+  });
 
-// 手機按鈕
-document.getElementById("prevBtn").onclick = ()=>{
-  index = Math.max(index-1,0);
-  show(index);
-};
-document.getElementById("nextBtn").onclick = ()=>{
-  index = Math.min(index+1,slides.length-1);
-  show(index);
-};
-
-// ===== 電腦滑鼠點擊換頁（手機不啟用）=====
-if (!('ontouchstart' in window)) {
-  document.addEventListener("click", () => {
-    index = Math.min(index + 1, slides.length - 1);
+  document.addEventListener("click",()=>{
+    index=Math.min(index+1,slides.length-1);
     show(index);
   });
 }
 
+// 手機：按鈕
+document.getElementById("prevBtn").onclick=()=>{
+  index=Math.max(index-1,0); show(index);
+};
+document.getElementById("nextBtn").onclick=()=>{
+  index=Math.min(index+1,slides.length-1); show(index);
+};
 </script>
 
 </body>
 </html>
-
