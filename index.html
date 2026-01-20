@@ -116,7 +116,7 @@ html,body{
   position:fixed;
   bottom:20px;
   right:20px;
-  z-index:50;
+  z-index:100;
   padding:12px 22px;
   border:none;
   border-radius:999px;
@@ -125,19 +125,15 @@ html,body{
   color:#fff;
   cursor:pointer;
   background:#333;
-  opacity:.7;
+  opacity:.8;
+}
+
+.edit-btn:hover{
+  opacity:1;
 }
 
 @media (max-width:768px){
   .edit-btn{display:none;}
-  .slide{
-    justify-content:flex-start;
-    overflow-y:auto;
-    padding:80px 20px 120px;
-  }
-  .slide h1{font-size:40px;}
-  .rule{font-size:18px;}
-  .reward{font-size:20px;padding:10px 24px;}
 }
 </style>
 </head>
@@ -230,18 +226,21 @@ function show(i){
   slides[i].classList.add("active");
 }
 
-/* 鍵盤 */
+/* 鍵盤控制 */
 document.addEventListener("keydown",e=>{
   if(editing) return;
   if(e.key==="ArrowRight"){ index=Math.min(index+1,slides.length-1); show(index); }
   if(e.key==="ArrowLeft"){ index=Math.max(index-1,0); show(index); }
 });
 
-/* 滑鼠 */
+/* 滑鼠控制（重點修正版） */
 if(!("ontouchstart" in window)){
   document.addEventListener("click",e=>{
     if(editing) return;
-    if(e.target.id==="editBtn") return;
+
+    // ⭐ 核心修正：只要點在按鈕裡面，完全不換頁
+    if(e.target.closest("#editBtn")) return;
+
     index += (e.clientX > innerWidth/2 ? 1 : -1);
     index = Math.max(0, Math.min(index, slides.length-1));
     show(index);
@@ -256,9 +255,10 @@ firebaseOn(rewardRef,snap=>{
   });
 });
 
-/* 編輯 */
-editBtn.onclick = (e) => {
+/* 編輯獎金（雙保險） */
+editBtn.addEventListener("click",e=>{
   e.stopPropagation();
+
   if(!editing){
     if(prompt("請輸入獎金編輯密碼")===PASSWORD){
       editing=true;
@@ -273,10 +273,8 @@ editBtn.onclick = (e) => {
     firebaseSet(rewardRef,data);
     editBtn.textContent="🔒 編輯獎金";
   }
-};
+});
 </script>
 
 </body>
 </html>
-
-
