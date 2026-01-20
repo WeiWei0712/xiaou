@@ -1,36 +1,204 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>尾牙獎金爭奪戰</title>
 
 <style>
-body,html{
-  margin:0;height:100%;overflow:hidden;
-  font-family:"Segoe UI",sans-serif;
-  background:#0c0a19;color:#fff;
+:root{
+  --blue:#50b4ff;
+  --purple:#b45aff;
+  --white:#f5f5f5;
 }
+
+*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  color:var(--white);
+}
+
+/* ===== 背景 ===== */
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  background:
+    radial-gradient(circle at top, #1a1440 0%, transparent 60%),
+    linear-gradient(120deg,#0c0a19,#120f2e);
+}
+
+.lights{
+  position:fixed;
+  inset:-20%;
+  z-index:-2;
+  pointer-events:none;
+}
+
+.lights::before,
+.lights::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.45;
+  animation:lightMove 22s linear infinite;
+}
+
+.lights::before{
+  background:linear-gradient(120deg,transparent 30%,#50b4ff 45%,#b45aff 55%,transparent 70%);
+  clip-path:polygon(0 10%,100% 0,85% 25%,20% 45%,80% 70%,10% 90%);
+}
+
+.lights::after{
+  background:linear-gradient(120deg,transparent 40%,#b45aff 55%,#50b4ff 65%,transparent 80%);
+  clip-path:polygon(10% 0,100% 15%,70% 35%,95% 60%,30% 85%,0 60%);
+  animation-duration:32s;
+}
+
+@keyframes lightMove{
+  from{transform:translate(-8%,-8%);}
+  to{transform:translate(8%,8%);}
+}
+
+/* 背景 LOGO */
+.bg-logo{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background:url("img/1.png") no-repeat center;
+  background-size:50vmin;
+  opacity:.35;
+  pointer-events:none;
+}
+
+/* ===== 投影片 ===== */
 .slide{
-  position:absolute;inset:0;
-  display:flex;flex-direction:column;
-  justify-content:center;align-items:center;
-  opacity:0;transition:.4s;
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:100px;
+  opacity:0;
+  transform:scale(.95);
+  transition:.6s ease;
 }
-.slide.active{opacity:1;}
+
+.slide.active{
+  opacity:1;
+  transform:scale(1);
+  z-index:1;
+}
+
+.slide h1{
+  font-size:86px;
+  margin:0 0 40px;
+  background:linear-gradient(90deg,#50b4ff,#b45aff);
+  background-clip: text;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 0 14px rgba(80,180,255,.5),0 0 28px rgba(180,90,255,.4);
+}
+
+.cover h1{font-size:90px;}
+.cover p{color:var(--purple);letter-spacing:3px;font-size:26px;}
+
+.rule{
+  font-size:36px;
+  line-height:1.8;
+  max-width:1000px;
+}
+
+.reward{
+  margin-top:50px;
+  padding:18px 50px;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  font-size:40px;
+  font-weight:700;
+  box-shadow:0 0 24px rgba(180,90,255,.6);
+}
+
+/* ===== 編輯按鈕（桌機 only） ===== */
 .edit-btn{
-  position:fixed;right:20px;bottom:20px;
-  padding:12px 22px;border-radius:999px;
-  border:none;background:#333;color:#fff;
-  cursor:pointer;z-index:100;
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  z-index:50;
+  padding:12px 22px;
+  border:none;
+  border-radius:999px;
+  font-size:16px;
+  font-weight:700;
+  color:#fff;
+  cursor:pointer;
+  background:linear-gradient(135deg,#555,#333);
+  opacity:.7;
 }
-@media(max-width:768px){.edit-btn{display:none;}}
+
+/* 手機完全隱藏編輯功能 */
+@media (max-width:768px){
+  .edit-btn{ display:none; }
+}
+
+/* ===== 手機版 ===== */
+.nav-buttons{display:none;}
+
+@media (max-width:768px){
+  .slide{
+    justify-content:flex-start;
+    overflow-y:auto;
+    padding:80px 20px 120px;
+  }
+
+  .slide h1{font-size:40px;}
+  .cover h1{font-size:42px;}
+  .rule{font-size:18px;}
+  .reward{font-size:20px;padding:10px 24px;}
+
+  .nav-buttons{
+    display:flex;
+    position:fixed;
+    bottom:20px;
+    left:0;
+    width:100%;
+    padding:0 20px;
+    z-index:30;
+  }
+
+  .nav-buttons button{
+    flex:1;
+    margin:0 10px;
+    padding:14px 0;
+    border:none;
+    border-radius:999px;
+    font-size:18px;
+    font-weight:700;
+    color:#fff;
+    background:linear-gradient(135deg,var(--purple),var(--blue));
+  }
+}
 </style>
 </head>
 
 <body>
 
+<div class="bg"></div>
+<div class="lights"></div>
+<div class="bg-logo"></div>
+
 <button id="editBtn" class="edit-btn">🔒 編輯獎金</button>
+
+<div class="nav-buttons">
+  <button id="prevBtn">上一頁</button>
+  <button id="nextBtn">下一頁</button>
+</div>
 
 <div class="slide active cover">
   <h1>僑泰鑫健康</h1>
@@ -74,85 +242,101 @@ body,html{
   <div class="reward">獎金 NT$ <span class="money" data-id="g6">1,000</span></div>
 </div>
 
-<!-- Firebase -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+<script>
+/* ===== 換頁 ===== */
+const slides = document.querySelectorAll(".slide");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const editBtn = document.getElementById("editBtn");
+const moneyEls = document.querySelectorAll(".money");
 
-const app = initializeApp({
-  apiKey: "AIzaSyA5Ih04BPN5mlTcF--GYbvSns1j0NmXaCo",
-  authDomain: "test1-9f9b3.firebaseapp.com",
-  databaseURL: "https://test1-9f9b3-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "test1-9f9b3"
+let index = 0;
+let editing = false;
+
+function show(i){
+  slides.forEach(s=>s.classList.remove("active"));
+  slides[i].classList.add("active");
+}
+
+/* ===== 鍵盤（桌機） ===== */
+document.addEventListener("keydown",e=>{
+  if(editing) return;
+  if(e.key==="ArrowRight"){
+    index = Math.min(index+1, slides.length-1);
+    show(index);
+  }
+  if(e.key==="ArrowLeft"){
+    index = Math.max(index-1, 0);
+    show(index);
+  }
 });
 
-const db = getDatabase(app);
-window.rewardRef = ref(db,"rewards");
-window.firebaseOn = onValue;
-window.firebaseSet = set;
-</script>
-
-<script>
-window.addEventListener("load", () => {
-
-  const slides = document.querySelectorAll(".slide");
-  const moneyEls = document.querySelectorAll(".money");
-  const editBtn = document.getElementById("editBtn");
-
-  let index = 0;
-  let editing = false;
-  const PASSWORD = "20260122";
-
-  function show(i){
-    slides.forEach(s=>s.classList.remove("active"));
-    slides[i].classList.add("active");
-  }
-
-  // 🔹 鍵盤控制
-  document.addEventListener("keydown", e=>{
-    if(editing) return;
-    if(e.key==="ArrowRight"){ index=Math.min(index+1,slides.length-1); show(index); }
-    if(e.key==="ArrowLeft"){ index=Math.max(index-1,0); show(index); }
-  });
-
-  // 🔹 滑鼠控制
+/* ===== 桌機：點畫面換頁（修正版） ===== */
+if(!("ontouchstart" in window)){
   document.addEventListener("click", e=>{
     if(editing) return;
+
+    // ⭐ 關鍵修正：點在編輯按鈕裡面就不換頁
     if(e.target.closest("#editBtn")) return;
 
-    index += e.clientX > innerWidth/2 ? 1 : -1;
-    index = Math.max(0,Math.min(index,slides.length-1));
+    index = Math.min(index+1, slides.length-1);
     show(index);
   });
+}
 
-  // 🔹 Firebase 同步
-  firebaseOn(rewardRef,snap=>{
-    const data=snap.val()||{};
-    moneyEls.forEach(el=>{
-      if(data[el.dataset.id]) el.textContent=data[el.dataset.id];
-    });
-  });
-
-  // 🔹 編輯獎金
-  editBtn.addEventListener("click", e=>{
-    e.stopPropagation();
-    if(!editing){
-      if(prompt("輸入密碼")===PASSWORD){
-        editing=true;
-        moneyEls.forEach(el=>el.contentEditable=true);
-        editBtn.textContent="🔓 編輯中";
-      }
-    }else{
-      editing=false;
-      moneyEls.forEach(el=>el.contentEditable=false);
-      const data={};
-      moneyEls.forEach(el=>data[el.dataset.id]=el.textContent.trim());
-      firebaseSet(rewardRef,data);
-      editBtn.textContent="🔒 編輯獎金";
-    }
-  });
-
+/* ===== 手機按鈕 ===== */
+prevBtn.addEventListener("click", e=>{
+  e.stopPropagation();
+  index = Math.max(index-1, 0);
+  show(index);
 });
+
+nextBtn.addEventListener("click", e=>{
+  e.stopPropagation();
+  index = Math.min(index+1, slides.length-1);
+  show(index);
+});
+
+/* ===== 獎金編輯（桌機 only） ===== */
+const PASSWORD = "20260122";
+
+/* 載入儲存 */
+const saved = JSON.parse(localStorage.getItem("rewards")||"{}");
+moneyEls.forEach(el=>{
+  if(saved[el.dataset.id]){
+    el.textContent = saved[el.dataset.id];
+  }
+});
+
+/* 編輯按鈕（修正版） */
+editBtn.onclick = (e) => {
+  e.stopPropagation();
+
+  const isMobile = window.matchMedia("(max-width:768px)").matches;
+  if(isMobile) return;
+
+  if(!editing){
+    const input = prompt("請輸入獎金編輯密碼");
+    if(input===PASSWORD){
+      editing=true;
+      moneyEls.forEach(el=>el.contentEditable=true);
+      editBtn.textContent="🔓 編輯中";
+      editBtn.style.opacity=1;
+    }else{
+      alert("密碼錯誤");
+    }
+  }else{
+    editing=false;
+    moneyEls.forEach(el=>el.contentEditable=false);
+
+    const data={};
+    moneyEls.forEach(el=>data[el.dataset.id]=el.textContent.trim());
+    localStorage.setItem("rewards",JSON.stringify(data));
+
+    editBtn.textContent="🔒 編輯獎金";
+    editBtn.style.opacity=.7;
+  }
+};
 </script>
 
 </body>
