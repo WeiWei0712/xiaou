@@ -257,7 +257,8 @@ firebaseOn(rewardRef,snap=>{
 });
 
 /* 編輯 */
-editBtn.onclick=()=>{
+editBtn.onclick = (e) => {
+  e.stopPropagation();
   if(!editing){
     if(prompt("請輸入獎金編輯密碼")===PASSWORD){
       editing=true;
@@ -277,4 +278,5 @@ editBtn.onclick=()=>{
 
 </body>
 </html>
+
 
