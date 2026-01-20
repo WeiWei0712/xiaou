@@ -1,123 +1,34 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>尾牙獎金爭奪戰</title>
 
 <style>
-:root{
-  --blue:#50b4ff;
-  --purple:#b45aff;
-  --white:#f5f5f5;
+body,html{
+  margin:0;height:100%;overflow:hidden;
+  font-family:"Segoe UI",sans-serif;
+  background:#0c0a19;color:#fff;
 }
-
-*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
-
-html,body{
-  width:100%;
-  height:100%;
-  margin:0;
-  overflow:hidden;
-  color:var(--white);
-}
-
-/* ===== 背景 ===== */
-.bg{
-  position:fixed;
-  inset:0;
-  z-index:-3;
-  background:
-    radial-gradient(circle at top, #1a1440 0%, transparent 60%),
-    linear-gradient(120deg,#0c0a19,#120f2e);
-}
-
-.lights{
-  position:fixed;
-  inset:-20%;
-  z-index:-2;
-  pointer-events:none;
-}
-
-.lights::before,
-.lights::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  opacity:.45;
-  animation:lightMove 22s linear infinite;
-}
-
-.lights::before{
-  background:linear-gradient(120deg,transparent 30%,#50b4ff 45%,#b45aff 55%,transparent 70%);
-}
-
-.lights::after{
-  background:linear-gradient(120deg,transparent 40%,#b45aff 55%,#50b4ff 65%,transparent 80%);
-  animation-duration:32s;
-}
-
-@keyframes lightMove{
-  from{transform:translate(-8%,-8%);}
-  to{transform:translate(8%,8%);}
-}
-
-/* ===== 投影片 ===== */
 .slide{
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:100px;
-  opacity:0;
-  transform:scale(.95);
-  transition:.6s ease;
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  opacity:0;transition:.4s;
 }
-
-.slide.active{
-  opacity:1;
-  transform:scale(1);
-}
-
-.slide h1{
-  font-size:86px;
-  margin:0 0 40px;
-  background:linear-gradient(90deg,#50b4ff,#b45aff);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.rule{font-size:36px;}
-.reward{font-size:40px;margin-top:40px;}
-
+.slide.active{opacity:1;}
 .edit-btn{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  z-index:100;
-  padding:12px 22px;
-  border:none;
-  border-radius:999px;
-  font-size:16px;
-  font-weight:700;
-  color:#fff;
-  cursor:pointer;
-  background:#333;
+  position:fixed;right:20px;bottom:20px;
+  padding:12px 22px;border-radius:999px;
+  border:none;background:#333;color:#fff;
+  cursor:pointer;z-index:100;
 }
-
-@media (max-width:768px){
-  .edit-btn{display:none;}
-}
+@media(max-width:768px){.edit-btn{display:none;}}
 </style>
 </head>
 
 <body>
-
-<div class="bg"></div>
-<div class="lights"></div>
 
 <button id="editBtn" class="edit-btn">🔒 編輯獎金</button>
 
@@ -163,64 +74,81 @@ html,body{
   <div class="reward">獎金 NT$ <span class="money" data-id="g6">1,000</span></div>
 </div>
 
-<!-- ===== Firebase（一定先載入） ===== -->
+<!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
 
-const firebaseConfig = {
+const app = initializeApp({
   apiKey: "AIzaSyA5Ih04BPN5mlTcF--GYbvSns1j0NmXaCo",
   authDomain: "test1-9f9b3.firebaseapp.com",
   databaseURL: "https://test1-9f9b3-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "test1-9f9b3",
-  storageBucket: "test1-9f9b3.firebasestorage.app",
-  messagingSenderId: "549329433515",
-  appId: "1:549329433515:web:28f9d427337c34b65c98ee"
-};
+  projectId: "test1-9f9b3"
+});
 
-const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
-window.rewardRef = ref(db, "rewards");
+window.rewardRef = ref(db,"rewards");
 window.firebaseOn = onValue;
 window.firebaseSet = set;
 </script>
 
-<!-- ===== 所有控制 JS 一定等載入完成 ===== -->
 <script>
 window.addEventListener("load", () => {
 
+  const slides = document.querySelectorAll(".slide");
   const moneyEls = document.querySelectorAll(".money");
   const editBtn = document.getElementById("editBtn");
+
+  let index = 0;
   let editing = false;
   const PASSWORD = "20260122";
 
-  // Firebase 同步
-  firebaseOn(rewardRef, snap => {
-    const data = snap.val() || {};
+  function show(i){
+    slides.forEach(s=>s.classList.remove("active"));
+    slides[i].classList.add("active");
+  }
+
+  // 🔹 鍵盤控制
+  document.addEventListener("keydown", e=>{
+    if(editing) return;
+    if(e.key==="ArrowRight"){ index=Math.min(index+1,slides.length-1); show(index); }
+    if(e.key==="ArrowLeft"){ index=Math.max(index-1,0); show(index); }
+  });
+
+  // 🔹 滑鼠控制
+  document.addEventListener("click", e=>{
+    if(editing) return;
+    if(e.target.closest("#editBtn")) return;
+
+    index += e.clientX > innerWidth/2 ? 1 : -1;
+    index = Math.max(0,Math.min(index,slides.length-1));
+    show(index);
+  });
+
+  // 🔹 Firebase 同步
+  firebaseOn(rewardRef,snap=>{
+    const data=snap.val()||{};
     moneyEls.forEach(el=>{
-      if(data[el.dataset.id]) el.textContent = data[el.dataset.id];
+      if(data[el.dataset.id]) el.textContent=data[el.dataset.id];
     });
   });
 
-  // 編輯按鈕（現在一定會跳）
-  editBtn.addEventListener("click", e => {
+  // 🔹 編輯獎金
+  editBtn.addEventListener("click", e=>{
     e.stopPropagation();
-
-    if (!editing) {
-      const pwd = prompt("請輸入獎金編輯密碼");
-      if (pwd === PASSWORD) {
-        editing = true;
-        moneyEls.forEach(el => el.contentEditable = true);
-        editBtn.textContent = "🔓 編輯中";
+    if(!editing){
+      if(prompt("輸入密碼")===PASSWORD){
+        editing=true;
+        moneyEls.forEach(el=>el.contentEditable=true);
+        editBtn.textContent="🔓 編輯中";
       }
-    } else {
-      editing = false;
-      moneyEls.forEach(el => el.contentEditable = false);
-      const data = {};
-      moneyEls.forEach(el => data[el.dataset.id] = el.textContent.trim());
-      firebaseSet(rewardRef, data);
-      editBtn.textContent = "🔒 編輯獎金";
+    }else{
+      editing=false;
+      moneyEls.forEach(el=>el.contentEditable=false);
+      const data={};
+      moneyEls.forEach(el=>data[el.dataset.id]=el.textContent.trim());
+      firebaseSet(rewardRef,data);
+      editBtn.textContent="🔒 編輯獎金";
     }
   });
 
