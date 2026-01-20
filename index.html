@@ -64,17 +64,6 @@ html,body{
   to{transform:translate(8%,8%);}
 }
 
-/* 背景 LOGO */
-.bg-logo{
-  position:fixed;
-  inset:0;
-  z-index:-1;
-  background:url("img/1.png") no-repeat center;
-  background-size:50vmin;
-  opacity:.35;
-  pointer-events:none;
-}
-
 /* ===== 投影片 ===== */
 .slide{
   position:absolute;
@@ -100,10 +89,8 @@ html,body{
   font-size:86px;
   margin:0 0 40px;
   background:linear-gradient(90deg,#50b4ff,#b45aff);
-  background-clip: text;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  text-shadow:0 0 14px rgba(80,180,255,.5),0 0 28px rgba(180,90,255,.4);
 }
 
 .cover h1{font-size:90px;}
@@ -122,10 +109,9 @@ html,body{
   background:linear-gradient(135deg,var(--purple),var(--blue));
   font-size:40px;
   font-weight:700;
-  box-shadow:0 0 24px rgba(180,90,255,.6);
 }
 
-/* ===== 編輯按鈕（桌機 only） ===== */
+/* 編輯按鈕 */
 .edit-btn{
   position:fixed;
   bottom:20px;
@@ -138,51 +124,12 @@ html,body{
   font-weight:700;
   color:#fff;
   cursor:pointer;
-  background:linear-gradient(135deg,#555,#333);
+  background:#333;
   opacity:.7;
 }
 
-/* 手機完全隱藏編輯功能 */
 @media (max-width:768px){
-  .edit-btn{ display:none; }
-}
-
-/* ===== 手機版 ===== */
-.nav-buttons{display:none;}
-
-@media (max-width:768px){
-  .slide{
-    justify-content:flex-start;
-    overflow-y:auto;
-    padding:80px 20px 120px;
-  }
-
-  .slide h1{font-size:40px;}
-  .cover h1{font-size:42px;}
-  .rule{font-size:18px;}
-  .reward{font-size:20px;padding:10px 24px;}
-
-  .nav-buttons{
-    display:flex;
-    position:fixed;
-    bottom:20px;
-    left:0;
-    width:100%;
-    padding:0 20px;
-    z-index:30;
-  }
-
-  .nav-buttons button{
-    flex:1;
-    margin:0 10px;
-    padding:14px 0;
-    border:none;
-    border-radius:999px;
-    font-size:18px;
-    font-weight:700;
-    color:#fff;
-    background:linear-gradient(135deg,var(--purple),var(--blue));
-  }
+  .edit-btn{display:none;}
 }
 </style>
 </head>
@@ -191,14 +138,8 @@ html,body{
 
 <div class="bg"></div>
 <div class="lights"></div>
-<div class="bg-logo"></div>
 
 <button id="editBtn" class="edit-btn">🔒 編輯獎金</button>
-
-<div class="nav-buttons">
-  <button id="prevBtn">上一頁</button>
-  <button id="nextBtn">下一頁</button>
-</div>
 
 <div class="slide active cover">
   <h1>僑泰鑫健康</h1>
@@ -208,144 +149,90 @@ html,body{
 
 <div class="slide">
   <h1>一起吹落去</h1>
-  <div class="rule">每桌派 2 位人員參賽，輪流先把氣球吹氣，再使用吹氣後的氣球將 5 個杯子吹落，最快完成的組別獲勝。</div>
-  <div class="reward">獎金 NT$ <span class="money" data-id="g1">1,600</span></div>
+  <div class="rule">每桌派 2 位人員參賽...</div>
+  <div class="reward">獎金 NT$ <span class="money" data-id="g1">1600</span></div>
 </div>
 
 <div class="slide">
   <h1>大象大象誰的鼻子最長</h1>
-  <div class="rule">每桌派 3 位人員參賽，輪流於腰間綁上杯子，利用慣性將乒乓球甩入杯中，最快完成的 3 位獲勝</div>
-  <div class="reward">獎金 NT$ <span class="money" data-id="g2">3,000</span></div>
+  <div class="rule">每桌派 3 位人員參賽...</div>
+  <div class="reward">獎金 NT$ <span class="money" data-id="g2">3000</span></div>
 </div>
 
 <div class="slide">
   <h1>誰是人中人</h1>
-  <div class="rule">各桌 10 位人員參賽，輪流使用人中夾住筷子，將筷子放入寶特瓶中，最快完成的組別獲勝</div>
-  <div class="reward">獎金 NT$ <span class="money" data-id="g3">5,500</span></div>
+  <div class="rule">各桌 10 位人員參賽...</div>
+  <div class="reward">獎金 NT$ <span class="money" data-id="g3">5500</span></div>
 </div>
 
-<div class="slide">
-  <h1>剪不斷理還亂・甩不掉誰最賺</h1>
-  <div class="rule">現場所有小朋友上台參賽，每位小朋友身上貼上 10 張便條紙，計時2分鐘，必須將便利貼甩掉，身上張數最少的小朋友獲勝</div>
-  <div class="reward">獎金 NT$ <span class="money" data-id="g4">獎勵200元/位,第一名500元,總共2100元</span></div>
-</div>
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
 
-<div class="slide">
-  <h1>水能載舟，腹能載金</h1>
-  <div class="rule">每桌派 5 位人員參賽，輪流接力喝 5 種飲料，最快完成的組別獲勝</div>
-  <div class="reward">獎金 NT$ <span class="money" data-id="g5">2,000</span></div>
-</div>
+const firebaseConfig = {
+  apiKey: "AIzaSyA5Ih04BPN5mlTcF--GYbvSns1j0NmXaCo",
+  authDomain: "test1-9f9b3.firebaseapp.com",
+  databaseURL: "https://test1-9f9b3-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "test1-9f9b3",
+  storageBucket: "test1-9f9b3.firebasestorage.app",
+  messagingSenderId: "549329433515",
+  appId: "1:549329433515:web:28f9d427337c34b65c98ee"
+};
 
-<div class="slide">
-  <h1>乒乓接接樂</h1>
-  <div class="rule">每桌派 5 位人員參賽，輪流使用杯底將乒乓球拋起後，並用杯子接住，最快完成的組別獲勝</div>
-  <div class="reward">獎金 NT$ <span class="money" data-id="g6">1,000</span></div>
-</div>
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.rewardRef = ref(db, "rewards");
+window.firebaseOn = onValue;
+window.firebaseSet = set;
+</script>
 
 <script>
-/* ===== 換頁 ===== */
 const slides = document.querySelectorAll(".slide");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
+const moneyEls = document.querySelectorAll(".money");
+const editBtn = document.getElementById("editBtn");
 
 let index = 0;
 let editing = false;
+const PASSWORD = "20260122";
 
 function show(i){
   slides.forEach(s=>s.classList.remove("active"));
   slides[i].classList.add("active");
 }
 
-/* ===== 鍵盤（桌機） ===== */
-document.addEventListener("keydown",e=>{
-  if(e.key==="ArrowRight"){
-    index = Math.min(index+1, slides.length-1);
-    show(index);
-  }
-  if(e.key==="ArrowLeft"){
-    index = Math.max(index-1, 0);
-    show(index);
-  }
-});
-
-/* ===== 桌機：點畫面換頁（手機不啟用） ===== */
-if(!("ontouchstart" in window)){
-  document.addEventListener("click", e=>{
-    if(editing) return;
-    if(e.target.id==="editBtn") return;
-    index = Math.min(index+1, slides.length-1);
-    show(index);
-  });
-}
-
-/* ===== 手機按鈕（一定要阻止冒泡） ===== */
-prevBtn.addEventListener("click", e=>{
-  e.stopPropagation();      // ⭐ 關鍵
-  index = Math.max(index-1, 0);
-  show(index);
-});
-
-nextBtn.addEventListener("click", e=>{
-  e.stopPropagation();      // ⭐ 關鍵
+document.addEventListener("click",()=>{
+  if(editing) return;
   index = Math.min(index+1, slides.length-1);
   show(index);
 });
 
-
-
-/* ===== 獎金編輯（桌機 only） ===== */
-const PASSWORD = "20260122";
-const moneyEls = document.querySelectorAll(".money");
-
-/* 載入儲存 */
-const saved = JSON.parse(localStorage.getItem("rewards")||"{}");
-moneyEls.forEach(el=>{
-  if(saved[el.dataset.id]){
-    el.textContent = saved[el.dataset.id];
-  }
+/* 🔥 Firebase 即時同步 */
+firebaseOn(rewardRef, snap=>{
+  const data = snap.val() || {};
+  moneyEls.forEach(el=>{
+    if(data[el.dataset.id]) el.textContent = data[el.dataset.id];
+  });
 });
 
 editBtn.onclick=()=>{
-  const isMobile = window.matchMedia("(max-width:768px)").matches;
-  if(isMobile) return; // 手機完全禁止
-
   if(!editing){
-    const input = prompt("請輸入獎金編輯密碼");
-    if(input===PASSWORD){
+    if(prompt("輸入密碼")===PASSWORD){
       editing=true;
       moneyEls.forEach(el=>el.contentEditable=true);
       editBtn.textContent="🔓 編輯中";
-      editBtn.style.opacity=1;
-    }else{
-      alert("密碼錯誤");
     }
   }else{
     editing=false;
     moneyEls.forEach(el=>el.contentEditable=false);
-
     const data={};
     moneyEls.forEach(el=>data[el.dataset.id]=el.textContent.trim());
-    localStorage.setItem("rewards",JSON.stringify(data));
-
+    firebaseSet(rewardRef, data);
     editBtn.textContent="🔒 編輯獎金";
-    editBtn.style.opacity=.7;
   }
 };
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
